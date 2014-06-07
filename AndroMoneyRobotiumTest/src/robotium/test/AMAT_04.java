@@ -133,8 +133,6 @@ public final class AMAT_04 extends BaseInstrumentationTest {
 		assertTrue(solo.searchText("NT\\$ 643"));
 	}
 	
-	
-	
 	protected void tearDown() {
 		
 		//recovery

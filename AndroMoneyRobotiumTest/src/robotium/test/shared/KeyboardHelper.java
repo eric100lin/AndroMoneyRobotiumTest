@@ -11,7 +11,9 @@ public class KeyboardHelper {
     }
 
     public static void keyInLiteral(Solo solo, String literal) {
-        String viewName;
+        String viewName = "button_ac";
+        View view = solo.getView(viewName);
+        solo.clickOnView(view);
         for (int index=0; index<literal.length(); index++) {
             char c = literal.charAt(index);
             if (c=='0' || c=='1' || c=='2' || c=='3' || c=='4' || c=='5'
@@ -26,7 +28,7 @@ public class KeyboardHelper {
             else if (c=='/')    viewName = "button_divide";
             else if (c=='.')    viewName = "button_dot";
             else continue;
-            View view = solo.getView(viewName);
+            view = solo.getView(viewName);
             solo.clickOnView(view);
         }
     }
