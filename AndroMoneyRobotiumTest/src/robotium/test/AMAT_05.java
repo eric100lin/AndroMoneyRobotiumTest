@@ -2,13 +2,9 @@ package robotium.test;
 
 import robotium.test.shared.AndroMoneyAccountClasses;
 import robotium.test.shared.AndroMoneyAccountNames;
-import robotium.test.shared.AndroMoneyMenuTitles;
-import robotium.test.shared.AndroMoneyPlaceholders;
 import robotium.test.shared.AndroMoneyToastMessages;
-import robotium.test.shared.AvoidStartingPages;
 import robotium.test.shared.KeyboardHelper;
 import android.view.KeyEvent;
-import android.view.View;
 
 public class AMAT_05 extends BaseInstrumentationTest {
 
