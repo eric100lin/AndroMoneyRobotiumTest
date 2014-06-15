@@ -1,6 +1,5 @@
 package robotium.test;
 
-import robotium.test.shared.AndroMoneyAccountClasses;
 import robotium.test.shared.AndroMoneyAccountNames;
 import robotium.test.shared.AndroMoneyToastMessages;
 import robotium.test.shared.KeyboardHelper;
@@ -30,8 +29,6 @@ public class AMAT_06 extends BaseInstrumentationTest {
 	public void testAddBankAccountNameWithConflict() {
 		jumpToAccountPage();
 		clickModifyAccount(AndroMoneyAccountNames.DEFAULT_BANK);
-		solo.clickOnText(AndroMoneyAccountClasses.CASH);
-		solo.clickOnText(AndroMoneyAccountClasses.BANK);
 		for(String type : accountTypes) {
 			if(type==AndroMoneyAccountNames.DEFAULT_BANK)
 				continue;
@@ -48,10 +45,8 @@ public class AMAT_06 extends BaseInstrumentationTest {
 	public void testAddCreditAccountNameWithConflict() {
 		jumpToAccountPage();
 		clickModifyAccount(AndroMoneyAccountNames.DEFAULT_CREDIT);
-		solo.clickOnText(AndroMoneyAccountClasses.CASH);
-		solo.clickOnText(AndroMoneyAccountClasses.CREDIT);
 		for(String type : accountTypes) {
-			if(type==AndroMoneyAccountNames.DEFAULT_BANK)
+			if(type==AndroMoneyAccountNames.DEFAULT_CREDIT)
 				continue;
 			for(String money : moneys) {
 				fillAccountName(type);
