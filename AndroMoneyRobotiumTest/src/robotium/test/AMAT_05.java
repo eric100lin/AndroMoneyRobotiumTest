@@ -158,34 +158,6 @@ public class AMAT_05 extends BaseInstrumentationTest {
 	public void testModifyAccountMoneyWithEmpty() {
 		accountMoneyTesting("");
 	}
-
-	public void testModifyMixed() {
-		jumpToAccountPage();
-		String modified = "modified";
-		String accountTypes[] = { AndroMoneyAccountNames.DEFAULT_CASH,
-				AndroMoneyAccountNames.DEFAULT_BANK, AndroMoneyAccountNames.DEFAULT_CREDIT };
-		for (int i=0;i<accountTypes.length;i++) {
-			String type = accountTypes[i];
-			// 修改type的金額，改前0，改後"123456"
-			modifyAccountMoney(type, "123456");
-			modifyAccountName(type, modified);
-			modifyAccountType(modified, type, accountTypes[(i+1)%3]);
-			
-			// 驗證修改成功
-			solo.clickLongOnText(modified);
-			solo.clickOnText("修改");
-			solo.sendKey(KeyEvent.KEYCODE_BACK);
-			assertTrue(solo.searchText(accountTypes[(i+1)%3]));
-			assertTrue(solo.searchText(modified));
-			assertTrue(solo.searchText("123456"));
-			solo.sendKey(KeyEvent.KEYCODE_BACK);
-			
-			// 修改回去0
-			modifyAccountMoney(modified, "0");
-			modifyAccountType(modified, accountTypes[(i+1)%3], type);
-			modifyAccountName(modified, type);
-		}
-	}
 	
 	private void accountMoneyTesting(String literal) {
 		jumpToAccountPage();
