@@ -45,7 +45,30 @@ public class BaseInstrumentationTest extends ActivityInstrumentationTestCase2 {
 		solo.clickOnText(AndroMoneyMenuTitles.ACCOUNT);
 	}
 	
+	protected void clickOnDialogButton(String text){
+		clickOnDialogButton(solo.getButton(text).getId());
+	}
+	
+	protected void clickOnDialogButton(int index){
+		Context context = getInstrumentation().getTargetContext().getApplicationContext();
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
+		
+		View view = solo.getView(index);
+		final int[] location = new int[2];  
+		view.getLocationOnScreen(location); 
+		int x = location[0] + width;
+		int y = location[1]+view.getHeight()/2;
+		assertNotNull(view);
+		solo.clickOnScreen(x, y);
+	}
+	
 	protected void clickWidgetOnDialog(String resourceId) {
+		
 		Context context = getInstrumentation().getTargetContext().getApplicationContext();
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
