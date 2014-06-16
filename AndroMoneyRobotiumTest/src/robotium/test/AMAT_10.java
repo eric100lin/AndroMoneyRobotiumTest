@@ -48,37 +48,183 @@ public class AMAT_10 extends BaseInstrumentationTest {
 		solo.clickOnButton("確定");
 		solo.clickOnButton("存入");
 		solo.waitForText(" 5,533");
+		
 	}
 	
-	public void editContent()
+	public void editMoney(int i)
+	{
+		solo.clickOnButton(1); //數入金額BUTTON
+		solo.clickOnButton("AC");
+		
+		switch(i)
+		{
+		case 0:
+			solo.clickOnButton("6");
+			solo.clickOnButton("0");
+			solo.clickOnButton("2");
+			solo.clickOnButton("3");
+			break;
+		case 1:
+			solo.clickOnButton("-");
+			solo.clickOnButton("5");
+			solo.clickOnButton("2");
+			solo.clickOnButton("3");
+			solo.clickOnButton("0");
+			break;
+		case 2:
+			solo.clickOnButton("9");
+			solo.clickOnButton("．");
+			solo.clickOnButton("7");
+			solo.clickOnButton("4");
+			break;
+		case 3:
+			solo.clickOnButton("-");
+			solo.clickOnButton("8");
+			solo.clickOnButton("．");
+			solo.clickOnButton("2");
+			solo.clickOnButton("5");
+			break;
+		case 4:
+			solo.clickOnButton("0");
+			break;
+		case 5:
+			break;
+		}
+		solo.clickOnButton("OK");
+	}
+	
+	public void editAccount(int i)
+	{
+		switch(i)
+		{
+		case 0:
+			solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CREDIT);
+			break;
+		case 1:
+			solo.clickOnText(AndroMoneyAccountNames.DEFAULT_BANK);
+			break;
+		case 2:
+			solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CASH);
+			break;
+		}
+		
+	}
+	
+	public void editMemo(int i)
+	{
+		solo.clickOnText("備註：");
+		switch(i)
+		{
+		case 0:
+			solo.enterText(0, "This is Edit.");
+			break;
+		case 1:
+			solo.clearEditText(0);
+			break;
+		}
+		solo.clickOnButton("確定");
+	}
+	
+	public void editContent(int moneyid,int accountid,int textid)
 	{
 
 		solo.clickOnText(AndroMoneyTransactionTypes.OUTGOING);
-		solo.clickOnText("5533");
 		
-		solo.clickOnButton("AC");
-		solo.clickOnButton("6");
-		solo.clickOnButton("0");
-		solo.clickOnButton("2");
-		solo.clickOnButton("3");
-		solo.clickOnButton("OK");
-		
+		editMoney(moneyid);
+
 		solo.clickOnText("類別：");
 		solo.clickOnText("服飾美容");
 		solo.clickOnText("配件");
+		
 		solo.clickOnText("帳戶：");
-		solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CREDIT);
+		editAccount(accountid);
+		
 		solo.clickOnText("專案：");
 		solo.clickOnText("個人");
+		
 		solo.clickOnText("商家：");
 		solo.clickOnText("星巴克");
+		
 		solo.clickOnText("週期：");
 		solo.clickOnText("一次");
 		solo.clickOnButton("確定");
-		solo.clickOnText("備註：");
-		solo.enterText(0, "This is Edit."); 
+		
+		editMemo(textid);
 	}
-	public void testEditDefaultAccountWithDefaultTransactionInMainpage() {
+	
+	public void checkMoney(int i)
+	{
+		switch(i)
+		{
+		case 0:
+			assertTrue(solo.searchText("6,023"));
+			break;
+		case 1:
+			assertTrue(solo.searchText("-5,230"));
+			break;
+		case 2:
+			assertTrue(solo.searchText("9.74"));
+			break;
+		case 3:
+			assertTrue(solo.searchText("-8.25"));
+			break;
+		case 4:
+			assertTrue(solo.searchText("0"));
+			break;
+		case 5:
+			assertTrue(solo.searchText("0"));
+			break;
+		}
+	}
+	
+	public void checkAccount(int i)
+	{
+		switch(i)
+		{
+		case 0:
+			assertTrue(solo.searchText(AndroMoneyAccountNames.DEFAULT_CREDIT));
+			break;
+		case 1:
+			assertTrue(solo.searchText(AndroMoneyAccountNames.DEFAULT_BANK));
+			break;
+		case 2:
+			assertTrue(solo.searchText(AndroMoneyAccountNames.DEFAULT_CASH));
+			break;
+		}
+		
+	}
+	
+	public void checkMemo(int i)
+	{
+		switch(i)
+		{
+		case 0:
+			assertTrue(solo.searchText("This is Edit."));
+			break;
+		case 1:
+			assertFalse(solo.searchText("This is Edit."));
+			break;
+		}
+	}
+	
+	public void checkContent(int moneyid,int accountid,int textid)
+	{
+		editAccount(accountid);
+		solo.waitForText("詳細資料");
+		
+		checkMoney(moneyid);
+		checkAccount(accountid);
+		checkMemo(textid);
+		assertTrue(solo.searchText("服飾美容 - 配件"));	
+		assertTrue(solo.searchText("個人"));
+		assertTrue(solo.searchText("星巴克"));
+		
+	}
+	
+	
+	/// TestCase Prototype
+	public void DefaultTransactionInMainpage(int moneyid,int accountid,int textid)
+	{
 		AvoidStartingPages.toDo(solo);
 		
 		DefaultNew();
@@ -88,21 +234,15 @@ public class AMAT_10 extends BaseInstrumentationTest {
 		
 		clickOnDialogButton("修改");
 		
-		editContent();
+		editContent( moneyid, accountid, textid);
 		
-		solo.clickOnButton("確定");
 		solo.clickOnButton("存入");
 		
 		//Check
-		solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CREDIT);
-		solo.waitForText("詳細資料");
-		assertTrue(solo.searchText("6,023"));
-		assertTrue(solo.searchText(AndroMoneyAccountNames.DEFAULT_CREDIT));
-		assertTrue(solo.searchText("服飾美容 - 配件"));	
-		assertTrue(solo.searchText("個人"));
-		assertTrue(solo.searchText("星巴克"));
-		assertTrue(solo.searchText("This is Edit."));
+		checkContent(moneyid, accountid, textid);
 		
+		solo.sendKey(KeyEvent.KEYCODE_BACK);
+		/*
 		//確認後刪除
 		solo.sendKey(KeyEvent.KEYCODE_BACK);
 		solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CREDIT);
@@ -110,11 +250,11 @@ public class AMAT_10 extends BaseInstrumentationTest {
 		clickOnDialogButton(solo.getImageButton(0).getId()); //刪除Button
 		solo.clickOnButton("確定");
 		assertFalse(solo.searchText(AndroMoneyAccountNames.DEFAULT_CREDIT));
-		
-		
+		*/
 	}
 	
-	public void testEditDefaultAccountWithDefaultTransactionInAccountpage() {
+	public void DefaultTransactionInAccountpage(int moneyid,int accountid,int textid)
+	{
 		AvoidStartingPages.toDo(solo);
 		
 		DefaultNew();
@@ -128,9 +268,8 @@ public class AMAT_10 extends BaseInstrumentationTest {
 		
 		clickOnDialogButton("修改");
 		
-		editContent();
+		editContent( moneyid, accountid, textid);
 		
-		solo.clickOnButton("確定");
 		solo.clickOnButton("存入");
 		
 		//回到MainPage
@@ -138,25 +277,40 @@ public class AMAT_10 extends BaseInstrumentationTest {
 		solo.sendKey(KeyEvent.KEYCODE_BACK);
 		
 		//Check
-		solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CREDIT);
-		solo.waitForText("詳細資料");
-		assertTrue(solo.searchText("6,023"));
-		assertTrue(solo.searchText(AndroMoneyAccountNames.DEFAULT_CREDIT));
-		assertTrue(solo.searchText("服飾美容 - 配件"));	
-		assertTrue(solo.searchText("個人"));
-		assertTrue(solo.searchText("星巴克"));
-		assertTrue(solo.searchText("This is Edit."));
-		
-		//確認後刪除
+		checkContent(moneyid, accountid, textid);
 		solo.sendKey(KeyEvent.KEYCODE_BACK);
-		solo.clickOnText(AndroMoneyAccountNames.DEFAULT_CREDIT);
-		solo.waitForText("詳細資料");
-		clickOnDialogButton(solo.getImageButton(0).getId()); //刪除Button
-		solo.clickOnButton("確定");
-		assertFalse(solo.searchText(AndroMoneyAccountNames.DEFAULT_CREDIT));
-		
-		
+
 	}
+	
+
+	////// TestCase Manager
+	public void testEditTransactionWithPositiveNumberToCreditInMainpage() {
+		DefaultTransactionInMainpage(0,0,0);	}
+	public void testEditTransactionWithNegativeNumberToBankInMainpage() {
+		DefaultTransactionInMainpage(1,1,1);	}
+	public void testEditTransactionWithPositiveFloatToCashInMainpage() {
+		DefaultTransactionInMainpage(2,2,0);	}
+	public void testEditTransactionWithNegativeFloatToCreditInMainpage() {
+		DefaultTransactionInMainpage(3,0,1);	}
+	public void testEditTransactionWithZeroToBankInMainpage() {
+		DefaultTransactionInMainpage(4,1,0);	}
+	public void testEditTransactionWithNoinputToCashInMainpage() {
+		DefaultTransactionInMainpage(5,2,1);	}
+	
+	
+	public void testEditTransactionWithPositiveNumberToCreditInAccountpage(int moneyid,int accountid,int textid) {
+		DefaultTransactionInAccountpage(0,0,0);	}
+	public void testEditTransactionWithNegativeNumberToBankInAccountpage() {
+		DefaultTransactionInAccountpage(1,1,1);	}
+	public void testEditTransactionWithPositiveFloatToCashInAccountpage() {
+		DefaultTransactionInAccountpage(2,2,0);	}
+	public void testEditTransactionWithNegativeFloatToCreditInAccountpage() {
+		DefaultTransactionInAccountpage(3,0,1);	}
+	public void testEditTransactionWithZeroToBankInAccountpage() {
+		DefaultTransactionInAccountpage(4,1,0);	}
+	public void testEditTransactionWithNoinputToCashInAccountpage() {
+		DefaultTransactionInAccountpage(5,2,1);	}
+	
 	
 	protected void clear(String text)
 	{
